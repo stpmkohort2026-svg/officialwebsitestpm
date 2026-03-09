@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - STPM 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #0a0a0f;
+            color: white;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: rgba(255,255,255,0.03);
+            border-right: 1px solid rgba(255,255,255,0.1);
+            padding: 30px;
+        }
+
+        .admin-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: #ff4444;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 10px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(0,212,255,0.1);
+            color: #00d4ff;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .page-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+        }
+
+        .logout-btn {
+            padding: 10px 25px;
+            background: rgba(255,68,68,0.1);
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #ff4444;
+            color: white;
+        }
+
+        /* Dashboard Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: #00d4ff;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            color: #00d4ff;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: white;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn-save {
+            padding: 15px 30px;
+            background: #00d4ff;
+            border: none;
+            border-radius: 10px;
+            color: black;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-save:hover {
+            background: white;
+        }
+
+        /* File Upload */
+        .upload-area {
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: #00d4ff;
+            background: rgba(0,212,255,0.05);
+        }
+
+        /* Nota List */
+        .nota-list {
+            margin-top: 20px;
+        }
+
+        .nota-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .nota-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-edit {
+            background: #00d4ff;
+            color: black;
+        }
+
+        .btn-delete {
+            background: #ff4444;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="admin-logo">
+            <span>🔴</span>
+            <span>ADMIN PANEL</span>
+        </div>
+        
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a class="nav-link active" onclick="showSection('dashboard')">
+                    <span>📊</span> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="showSection('announcement')">
+                    <span>📢</span> Announcement Bar
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="showSection('slider')">
+                    <span>🖼️</span> Main Slider
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="showSection('nota')">
+                    <span>📝</span> Bank Nota
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="showSection('ramalan')">
+                    <span>🎯</span> Ramalan STPM
+                </a>
+            </li>
+            <li class="nav-item">
+                    <a class="nav-link" onclick="showSection('harga')">
+                    <span>💰</span> Harga Servis
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="header">
+            <h1 class="page-title">Dashboard Overview</h1>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Visitors</div>
+                <div class="stat-value">2,456</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Orders Today</div>
+                <div class="stat-value">18</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Nota Uploaded</div>
+                <div class="stat-value" id="notaCount">12</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Active Users</div>
+                <div class="stat-value">5</div>
+            </div>
+        </div>
+
+        <!-- DASHBOARD SECTION -->
+        <div class="content-section active" id="dashboard">
+            <h2 class="section-title">Welcome, Admin</h2>
+            <p style="color: rgba(255,255,255,0.7); line-height: 1.8;">
+                Gunakan sidebar di kiri untuk menguruskan website. Anda boleh:<br>
+                • Tukar announcement bar<br>
+                • Update gambar slider<br>
+                • Tambah/buang nota<br>
+                • Edit ramalan STPM<br>
+                • Tukar harga servis
+            </p>
+        </div>
+
+        <!-- ANNOUNCEMENT SECTION -->
+        <div class="content-section" id="announcement">
+            <h2 class="section-title">Edit Announcement Bar</h2>
+            
+            <div class="form-group">
+                <label>Slide 1 Text</label>
+                <input type="text" id="ann1" value="Welcome to @stpm20266 Official Web Engine">
+            </div>
+            
+            <div class="form-group">
+                <label>Slide 2 Text</label>
+                <input type="text" id="ann2" value="Servis Cari Kajian Lepas: Pantas & Tepat">
+            </div>
+            
+            <div class="form-group">
+                <label>Slide 3 Text</label>
+                <input type="text" id="ann3" value="Nota Ramalan & Spot Tajuk (Exclusive Access)">
+            </div>
+
+            <button class="btn-save" onclick="saveAnnouncement()">💾 Save Changes</button>
+        </div>
+
+        <!-- SLIDER SECTION -->
+        <div class="content-section" id="slider">
+            <h2 class="section-title">Edit Main Slider</h2>
+            
+            <div class="form-group">
+                <label>Slide 1 - Title</label>
+                <input type="text" value="Welcome to @stpm20266 Official Web Engine">
+            </div>
+            <div class="form-group">
+                <label>Slide 1 - Description</label>
+                <textarea>Platform lengkap untuk pelajar STPM 2026...</textarea>
+            </div>
+            <div class="upload-area" onclick="document.getElementById('slide1img').click()">
+                <p>📤 Click to upload image (Slide 1)</p>
+                <input type="file" id="slide1img" hidden accept="image/*">
+            </div>
+
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 30px 0;">
+
+            <div class="form-group">
+                <label>Slide 2 - Title</label>
+                <input type="text" value="Servis Cari Kajian Lepas: Pantas & Tepat">
+            </div>
+            <div class="upload-area" onclick="document.getElementById('slide2img').click()">
+                <p>📤 Click to upload image (Slide 2)</p>
+                <input type="file" id="slide2img" hidden accept="image/*">
+            </div>
+
+            <button class="btn-save" onclick="saveSlider()" style="margin-top: 20px;">💾 Save Changes</button>
+        </div>
+
+        <!-- NOTA SECTION -->
+        <div class="content-section" id="nota">
+            <h2 class="section-title">Manage Bank Nota</h2>
+            
+            <div class="upload-area" onclick="document.getElementById('notaFile').click()">
+                <p>📤 Upload Nota PDF</p>
+                <input type="file" id="notaFile" hidden accept=".pdf">
+            </div>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <label>Nama Nota</label>
+                <input type="text" id="notaName" placeholder="Contoh: Nota Sejarah Bab 1">
+            </div>
+
+            <div class="form-group">
+                <label>Subjek</label>
+                <select id="notaSubject">
+                    <option>Sejarah</option>
+                    <option>Pengajian Am</option>
+                    <option>Geografi</option>
+                    <option>Ekonomi</option>
+                </select>
+            </div>
+
+            <button class="btn-save" onclick="addNota()">➕ Tambah Nota</button>
+
+            <div class="nota-list" id="notaList">
+                <h3 style="margin: 30px 0 15px; color: #00d4ff;">Senarai Nota</h3>
+                <!-- Nota items will be listed here -->
+                <div class="nota-item">
+                    <div>
+                        <strong>Nota Sejarah Bab 1 - Tamadun Awal</strong>
+                        <p style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">Sejarah • PDF • 2.4MB</p>
+                    </div>
+                    <div class="nota-actions">
+                        <button class="btn-small btn-edit">Edit</button>
+                        <button class="btn-small btn-delete" onclick="deleteNota(this)">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RAMALAN SECTION -->
+        <div class="content-section" id="ramalan">
+            <h2 class="section-title">Edit Ramalan STPM 2026</h2>
+            
+            <div class="form-group">
+                <label>Sejarah - Topik Ramalan</label>
+                <textarea placeholder="1. Perjanjian London 1824...
+2. Penubuhan Malayan Union...
+3. ..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Pengajian Am - Isu Semasa</label>
+                <textarea placeholder="1. Dasar Pendidikan...
+2. Ekonomi Digital...
+3. ..."></textarea>
+            </div>
+
+            <button class="btn-save" onclick="saveRamalan()">💾 Save Ramalan</button>
+        </div>
+
+        <!-- HARGA SECTION -->
+        <div class="content-section" id="harga">
+            <h2 class="section-title">Edit Harga Servis</h2>
+            
+            <div class="form-group">
+                <label>Sejarah - Harga Pakej</label>
+                <input type="number" id="hargaSejarah" value="3">
+            </div>
+
+            <div class="form-group">
+                <label>Pengajian Am - Harga Pakej</label>
+                <input type="number" id="hargaPA" value="6">
+            </div>
+
+            <div class="form-group">
+                <label>Rumusan Kajian (Add-on)</label>
+                <input type="number" id="hargaRumusan" value="2">
+            </div>
+
+            <div class="form-group">
+                <label>Bibliografi (Add-on)</label>
+                <input type="number" id="hargaBiblio" value="3">
+            </div>
+
+            <button class="btn-save" onclick="saveHarga()">💾 Save Changes</button>
+        </div>
+    </main>
+
+    <script>
+        // Check login
+        if (!sessionStorage.getItem('adminLoggedIn')) {
+            window.location.href = 'admin-login.html';
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            
+            // Show selected
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update nav
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update title
+            const titles = {
+                'dashboard': 'Dashboard Overview',
+                'announcement': 'Edit Announcement',
+                'slider': 'Edit Main Slider',
+                'nota': 'Manage Bank Nota',
+                'ramalan': 'Edit Ramalan STPM',
+                'harga': 'Edit Harga Servis'
+            };
+            document.querySelector('.page-title').textContent = titles[sectionId];
+        }
+
+        function logout() {
+            sessionStorage.removeItem('adminLoggedIn');
+            window.location.href = 'admin-login.html';
+        }
+
+        // Save functions (demo - connect to backend in production)
+        function saveAnnouncement() {
+            alert('✅ Announcement saved! (Demo mode)');
+        }
+
+        function saveSlider() {
+            alert('✅ Slider updated! (Demo mode)');
+        }
+
+        function addNota() {
+            alert('✅ Nota added! (Demo mode)');
+        }
+
+        function deleteNota(btn) {
+            if (confirm('Delete this nota?')) {
+                btn.closest('.nota-item').remove();
+            }
+        }
+
+        function saveRamalan() {
+            alert('✅ Ramalan saved! (Demo mode)');
+        }
+
+        function saveHarga() {
+            alert('✅ Harga updated! (Demo mode)');
+        }
+    </script>
+</body>
+</html>
