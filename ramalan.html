@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ramalan STPM 2026 | @stpm20266</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #ff00ff;
+            --accent: #ffd700;
+            --dark: #050508;
+            --danger: #ff4444;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--dark);
+            color: white;
+            min-height: 100vh;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            margin-left: 30px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 120px 20px 60px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .exclusive-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), #ff8c00);
+            color: black;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.1rem;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+        }
+
+        /* Ramalan Cards */
+        .ramalan-card {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,215,0,0.3);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ramalan-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), #ff8c00);
+        }
+
+        .ramalan-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .ramalan-icon {
+            font-size: 2.5rem;
+        }
+
+        .ramalan-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        .confidence-meter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .confidence-label {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .confidence-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--accent));
+            border-radius: 4px;
+        }
+
+        .confidence-percent {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .topic-list {
+            list-style: none;
+        }
+
+        .topic-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+
+        .topic-item:hover {
+            background: rgba(255,215,0,0.05);
+            transform: translateX(5px);
+        }
+
+        .topic-number {
+            width: 30px;
+            height: 30px;
+            background: var(--accent);
+            color: black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .topic-content h4 {
+            margin-bottom: 5px;
+            font-size: 1.05rem;
+        }
+
+        .topic-content p {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+        }
+
+        .hot-badge {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            margin-left: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(255,0,255,0.1));
+            border-radius: 25px;
+            padding: 40px;
+            margin-top: 40px;
+        }
+
+        .tips-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tip-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .tip-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .tip-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .tip-desc {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            margin-top: 50px;
+            padding: 40px;
+            background: rgba(255,215,0,0.05);
+            border: 2px dashed rgba(255,215,0,0.3);
+            border-radius: 25px;
+        }
+
+        .cta-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 18px 40px;
+            background: var(--accent);
+            color: black;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255,215,0,0.3);
+        }
+
+        /* Admin Edit Button */
+        .admin-edit {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 25px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            display: none;
+        }
+
+        .admin-edit.visible {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="nav">
+        <a href="index.html" class="logo">@stpm20266</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="nota.html">Nota</a>
+            <a href="kerja-kursus.html">Kerja Kursus</a>
+            <a href="founder.html">Founder</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <div class="exclusive-badge">⭐ EXCLUSIVE ACCESS</div>
+            <h1 class="page-title">RAMALAN STPM 2026</h1>
+            <p class="page-subtitle">Spot tajuk & ramalan eksklusif untuk peperiksaan STPM</p>
+        </div>
+
+        <p class="last-updated">🔄 Last updated: <span id="lastUpdated">15 Mac 2026</span></p>
+
+        <!-- Sejarah Ramalan -->
+        <div class="ramalan-card">
+            <div class="ramalan-header">
+                <span class="ramalan-icon">📜</span>
+                <h2 class="ramalan-title">SEJARAH 940/1</h2>
+            </div>
+
+            <div class="confidence-meter">
+                <span class="confidence-label">Confidence Level:</span>
+                <div class="confidence-bar">
+                    <div class="confidence-fill" style="width: 85%"></div>
+                </div>
+                <span class="confidence-percent">85%</span>
+            </div>
+
+            <ul class="topic-list">
