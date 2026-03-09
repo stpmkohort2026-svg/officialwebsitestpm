@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servis Kerja Kursus - STPM 2026 | @stpm20266</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #ff00ff;
+            --accent: #ffd700;
+            --dark: #050508;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--dark);
+            color: white;
+            min-height: 100vh;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            margin-left: 30px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 20px 60px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.2rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .service-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            padding: 40px;
+            transition: all 0.4s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 30px 60px rgba(0,212,255,0.2);
+        }
+
+        .service-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .service-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .service-desc {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .service-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .service-price span {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .order-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .order-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,212,255,0.3);
+        }
+
+        .process-section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 30px;
+            padding: 60px;
+            margin-top: 60px;
+        }
+
+        .process-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary);
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .process-step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+
+        .step-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .step-desc {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="nav">
+        <a href="index.html" class="logo">@stpm20266</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#servis">Servis</a>
+            <a href="nota.html">Nota</a>
+            <a href="ramalan.html">Ramalan</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">SERVIS KERJA KURSUS</h1>
+            <p class="page-subtitle">Bantu siapkan kerja kursus STPM anda dengan profesional</p>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">📊</div>
+                <h3 class="service-title">Kerja Kursus Pengajian Am</h3>
+                <p class="service-desc">
+                    Lengkap dengan kajian lapangan, analisis data, dan dokumentasi. 
+                    Sesuai untuk isu semasa dan pembangunan negara.
+                </p>
+                <div class="service-price">RM25<span>/projek</span></div>
+                <button class="order-btn" onclick="orderKK('pa')">Order Sekarang</button>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">📜</div>
+                <h3 class="service-title">Kerja Kursus Sejarah</h3>
+                <p class="service-desc">
+                    Kajian kes berkualiti dengan sumber primer dan sekunder. 
+                    Analisis mendalam tentang peristiwa bersejarah.
+                </p>
+                <div class="service-price">RM25<span>/projek</span></div>
+                <button class="order-btn" onclick="orderKK('sejarah')">Order Sekarang</button>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🌍</div>
+                <h3 class="service-title">Kerja Kursus Geografi</h3>
+                <p class="service-desc">
+                    Kajian lapangan dengan peta, graf, dan analisis spatial. 
+                    Termasuk gambar lokasi dan data primer.
+                </p>
+                <div class="service-price">RM30<span>/projek</span></div>
+                <button class="order-btn" onclick="orderKK('geo')">Order Sekarang</button>
+            </div>
+
+            <div class="service-card featured">
+                <div class="service-icon">⭐</div>
+                <h3 class="service-title">Package Semua Subjek</h3>
+                <p class="service-desc">
+                    Dapatkan diskaun istimewa bila order 2 atau lebih kerja kursus. 
+                    Free konsultasi dan revisi.
+                </p>
+                <div class="service-price">RM50<span>/2 projek</span></div>
+                <button class="order-btn" onclick="orderKK('package')">Order Package</button>
+            </div>
+        </div>
+
+        <div class="process-section">
+            <h2 class="process-title">CARA PROSES KERJA</h2>
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h4 class="step-title">Submit Details</h4>
+                    <p class="step-desc">Hantar tajuk dan keperluan kerja kursus anda</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h4 class="step-title">Consultation</h4>
+                    <p class="step-desc">Diskusi dengan team untuk finalisasi tajuk</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h4 class="step-title">Processing</h4>
+                    <p class="step-desc">Team kami akan siapkan kerja kursus (3-5 hari)</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">4</div>
+                    <h4 class="step-title">Delivery</h4>
+                    <p class="step-desc">Terima kerja siap dalam format PDF/Word</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Three.js background
+        const canvas = document.getElementById('bg-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        
+        const geometry = new THREE.BufferGeometry();
+        const count = 500;
+        const positions = new Float32Array(count * 3);
+        
+        for(let i = 0; i < count * 3; i++) {
+            positions[i] = (Math.random() - 0.5) * 50;
+        }
+        
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        
+        const material = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0x00d4ff,
+            transparent: true,
+            opacity: 0.6
+        });
+        
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+        
+        camera.position.z = 30;
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            particles.rotation.y += 0.0005;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        function orderKK(type) {
+            const messages = {
+                'pa': 'Saya nak order Kerja Kursus Pengajian Am (RM25)',
+                'sejarah': 'Saya nak order Kerja Kursus Sejarah (RM25)',
+                'geo': 'Saya nak order Kerja Kursus Geografi (RM30)',
+                'package': 'Saya nak order Package 2 Kerja Kursus (RM50)'
+            };
+            
+            const url = `https://t.me/CariKajianLepasStpm_bot?text=${encodeURIComponent(messages[type])}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
