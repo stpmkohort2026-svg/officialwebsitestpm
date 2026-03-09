@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - STPM 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .login-container {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px;
+            padding: 60px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        .lock-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #ff4444;
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00d4ff;
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #00d4ff;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #ff4444, #ff6b6b);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255,68,68,0.3);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: #00d4ff;
+        }
+
+        .error-msg {
+            background: rgba(255,68,68,0.1);
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-msg.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="lock-icon">🔒</div>
+        <h1>ADMIN ACCESS</h1>
+        <p class="subtitle">Restricted Area - Authorized Personnel Only</p>
+        
+        <div class="error-msg" id="errorMsg">
+            ❌ Password salah! Access denied.
+        </div>
+
+        <form onsubmit="return login(event)">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="username" placeholder="admin" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="login-btn">ACCESS DASHBOARD</button>
+        </form>
+
+        <a href="index.html" class="back-link">← Kembali ke Website</a>
+    </div>
+
+    <script>
+        // Simple password protection (change in production)
+        const ADMIN_USER = 'admin';
+        const ADMIN_PASS = 'stpm2026@admin';
+
+        function login(e) {
+            e.preventDefault();
+            
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            
+            if (user === ADMIN_USER && pass === ADMIN_PASS) {
+                // Set session
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                window.location.href = 'admin.html';
+            } else {
+                document.getElementById('errorMsg').classList.add('active');
+            }
+            
+            return false;
+        }
+    </script>
+</body>
+</html>
